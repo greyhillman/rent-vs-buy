@@ -1,0 +1,86 @@
+@mixin subgrid() {
+    display: grid;
+    grid-template-columns: subgrid;
+}
+
+@function shade_of_grey($level) {
+    @return rgb($level, $level, $level);
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 2em;
+    align-items: baseline; // https://melanie-richards.com/blog/css-grid-sticky/
+
+    margin: 0em 1em;
+
+    > header {
+        grid-column: span 2;
+        position: sticky;
+        top: 0;
+        background-color: white;
+        padding: 0.5em 1em;
+
+        border-bottom: darken($color: black, $amount: 50%) 0.2em solid;
+
+        @include subgrid();
+
+        h2 {
+            grid-column: span 2;
+        }
+
+        > section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            h3 {
+                grid-column: span 2;
+            }
+        }
+
+        section.buy {
+            text-align: right;
+
+            output {
+                text-align: right;
+            }
+        }
+
+        output {
+            text-align: right;
+        }
+    }
+
+    section {
+        &.both,
+        &#breakdown {
+            grid-column: span 2;
+        }
+
+        &#breakdown {
+            margin-top: 1em;
+        }
+
+        &.both {
+            width: 700px;
+            margin: 0 auto;
+        }
+
+        &.buy {
+            p.help {
+                padding-top: 0.5em;
+                font-size: 0.8em;
+            }
+        }
+    }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-align: center;
+}

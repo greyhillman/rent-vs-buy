@@ -1,0 +1,8 @@
+@mixin border() {
+    border: 2px groove ThreeDFace;
+}
+
+.place {
+    @include border();
+    padding: 0.5em;
+}

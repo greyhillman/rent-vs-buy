@@ -1,0 +1,10 @@
+@mixin square($size) {
+    width: $size;
+    height: $size;
+}
+
+input[type="checkbox"] {
+    @include square(1.5em);
+
+    cursor: pointer;
+}

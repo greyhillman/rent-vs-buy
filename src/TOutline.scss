@@ -1,0 +1,69 @@
+@mixin subgrid() {
+    display: grid;
+    grid-template-columns: subgrid;
+}
+
+@mixin grid($columns) {
+    display: grid;
+    grid-template-columns: repeat($columns, 1fr);
+}
+
+section.taccount {
+    @include grid(4);
+    border: black 1px solid;
+
+    padding: 0.2em;
+    column-gap: 0.25em;
+
+    strong {
+        font-size: medium;
+    }
+
+    > footer {
+        @include subgrid();
+        grid-column: span 4;
+
+        border-top: black 1px solid;
+        padding-top: 0.2em;
+
+        text-align: right;
+
+        > * {
+            grid-column: span 2;
+        }
+    }
+
+    header {
+        @include subgrid();
+        grid-column: span 4;
+        text-align: center;
+
+        > * {
+            grid-column: span 2;
+        }
+    }
+
+    .left,
+    .right {
+        @include subgrid();
+        grid-column: span 2;
+    }
+
+    .left .account {
+        grid-column: 1 / span 2;
+    }
+    .right .account {
+        grid-column: 1 / span 2;
+    }
+
+    .account {
+        @include subgrid();
+        // grid-column: span 2;
+
+        padding-left: 10px;
+    }
+
+    .account > :nth-child(2) {
+        text-align: right;
+    }
+}

@@ -1,0 +1,26 @@
+label {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+        "name input"
+        "help help";
+    row-gap: 0.25em;
+
+    strong {
+        grid-area: name;
+        padding-right: 2em;
+    }
+
+    > .input {
+        grid-area: input;
+        justify-self: flex-end;
+    }
+
+    p.help {
+        grid-area: help;
+        display: block;
+        padding: 0 0.5em;
+
+        font-size: 0.8em;
+    }
+}

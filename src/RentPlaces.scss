@@ -1,0 +1,51 @@
+$button-color: rgb(240, 240, 240);
+
+.places {
+    > ol {
+        list-style-type: none;
+
+        li {
+            margin-bottom: 0.5em;
+
+            &:last-of-type {
+                margin-bottom: 0;
+            }
+        }
+
+        margin-bottom: 0.5em;
+    }
+
+    button {
+        appearance: none;
+
+        border-style: groove;
+        border-width: 2px;
+        border-color: darken($color: $button-color, $amount: 20%);
+        border-radius: 1em;
+
+        font-size: 0.9em;
+        padding: 0.5em;
+
+        display: block;
+        margin: 0em auto;
+
+        background-color: $button-color;
+
+        &:enabled {
+            &:hover {
+                cursor: pointer;
+                background-color: darken($color: $button-color, $amount: 10%);
+            }
+
+            &:active {
+                background-color: darken($color: $button-color, $amount: 15%);
+            }
+        }
+
+        &:disabled {
+            border-width: 0;
+            text-decoration: line-through;
+            cursor: not-allowed;
+        }
+    }
+}

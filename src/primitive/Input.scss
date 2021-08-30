@@ -1,0 +1,15 @@
+input {
+    &[type="number"] {
+        text-align: right;
+        font-size: 1em;
+        width: 10em;
+        font-family: "Courier New", Courier, monospace;
+
+        background-color: darken($color: white, $amount: 5%);
+        border-radius: 0.5em;
+
+        &:blank {
+            background-color: adjust-color($color: red, $lightness: 90%);
+        }
+    }
+}
