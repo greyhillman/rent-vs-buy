@@ -2,120 +2,145 @@
 
 ## React
 
-I can't seem to find the article, but there was an article that refactored some React code into a MVC-like pattern.
-The main logic was put into models, the DOM code in their own folder, and then finally the connections into another folder.
-I followed that pattern and it turns out to be pretty nice.
+At a certain stage, I was finding it difficult to reason about React code.
+The `render` functions were getting long and were mixing together business logic, React hooks, and then the React DOM.
+I stumbled across [this article](https://sairys.medium.com/react-separating-responsibilities-using-hooks-b9c90dbb3ab9) while looking for something to help.
+The code was beautiful!
+I had to try the pattern out.
+
+The basic advice of the article is to split the components into 3 parts:
+
+-   business logic
+    -   how to calculate true rent, mortgage liability, etc.
+-   framework/implementation logic
+    -   `useState`, `useEffect`, `useMemo`, etc.
+-   presentational component
+    -   the `render` function and the React DOM
+
+The code is cleaner by following the pattern because each "thing" relies on less "things".
+
+**Lesson Learned: Split code into business logic, framework/implementation logic, and presentational component.**
 
 ### State
 
-I learned that `useState` should only hold what the user has entered; everything else should be computed instead of stored.
+For the last place a user rents, I wanted it to automatically cover the remaining years that the user is considering.
+If it weren't automatic, a user would have to keep it in sync themselves and risk having a shorter length than needed, which would lead to incorrect results.
 
-When working on the last rent place, I wanted that to be the rest of the years you're considering.
-In the beginning, I was storing that info along with the user-entered years for the previous places.
-Anytime a user changed the length of a place, I had to re-compute the last place's length and then store it again.
-It quickly became complicted:
+In the beginning, the last rent place's length was stored alongside the user-entered years for the previous rent places.
+There was 2 events that required the last rent place's length to be re-computed and stored:
 
--   what happens if a user increased a length and the last length would become negative?
--   how would we deal with adding a new place to rent? How about removing?
+-   one of the previous rent place's length changed
+-   the years being considered changed
 
-I remembered the article I mentioned above and refactored the code so the length is computed instead of stored.
+A constraint I had to deal with was ensuring the last rent place's length to be at least 1 year: anything shorter than that would be invalid.
+Because of this constraint, the function to update the rent places' lengths would return the previous state's value if the new last rent place's length was invalid.
+The code was getting complex and error-prone; something had to change.
 
-### Comparisons
+I remembered the article mentioned above and refactored the code so the length is just computed: not stored at all.
+I also moved the responsiblity of ensuring the years' constraint out of the function; the function only had to compute the last rent place's length.
+The code was simpler and cleaner than before.
+That's when I realized...
 
-#### Haskell
+**Lesson Learned: `useState` should be for user-entered data; compute the rest.**
 
-The `useState` hook is basically implementing a `State` monad from Haskell in JavaScript.
+For efficiency purposes, computed data can be "stored" (cached) using `useMemo`, which is what the function is designed for.
 
-##### `useMemo` and `MonadFix`
+### Comparisons with Haskell's `reflex`
 
-In Haskell, [`MonadFix`](https://hackage.haskell.org/package/base-4.15.0.0/docs/Control-Monad-Fix.html) is a type class that denotes a computation that has a [fixed point](https://en.wikipedia.org/wiki/Fixed_point_%28mathematics%29), or a value that it converges to when infinitely recursed.
-This is used in `reflex` for operations that create a "feedback cycle", so it will eventually come to definite value.
-I believe this follows from the denotational semantics of FRP.
+`reflex` is a functional reactive programming (FRP) library built in Haskell.
+I had played around with it previously but found it difficult when I needed to do something it didn't support.
+The basics of FRP were easy to understand and I liked the mathematical underpinnings, which is common in the Haskell community.
 
-I thought of `useMemo` as essentially meant for that.
-However, as I'm writing this, it's definitely not what it's meant for.
+While learning React hooks, I quickly started to relate React hooks with FRP in `reflex`.
+The main one was how `useState` was sort of like a `Dynamic a` in `reflex`: a combination of a FRP behavior and event.
+In fact, the [Dynamic.ts](./src/model/Dynamic.ts) and [Event.ts](./src/model/Event.ts) were created because of that.
+After figuring out this relation, programming with `useState` became easier.
 
-#### Functional Reactive Programming
+However, React is not FRP and lacks any denotation semantics (ei: mathematical underpinnings).
+It also was missing ideas from Haskell and functional programming in general that would have made things simpler.
 
-I had previous experience with using `reflex`, a Haskell implementation of functional reactive programming (FRP).
-In it, there's two fundamental elements:
+#### FRP
 
--   `Behaviour`: a value over time
--   `Event`: a value at times
+FRP (as used in `reflex`) has [denotational semantics](http://conal.net/papers/push-pull-frp/push-pull-frp.pdf), which is basically a mathematical model of how it works.
+In FRP, there are:
 
-which comes from the denotational semantics of FRP.
-`reflex` also provides a `Dynamic` value which is a combination of `Behaviour` and `Event`.
+-   Behaviours
+    -   values over time
+-   Events
+    -   values at a time
 
-As I was using `useState`, I really wanted to comebine both the value and the setter return from `useState` into a single object, as using the array was weird.
-I created a `Variable` "struct" to hold the `current` value and a method `update` to change the value, which used the setter from `useState`.
-It was at that point that it clicked for me that `Variable` is basically a `Dynamic` value from `reflex`.
-That's how I came to create `useDynamic`.
+Now, I know very little of the actual math behind FRP, but I have experienced the ["advantage of semantics-driven abstractions"](https://qfpl.io/posts/reflex/basics/events/#the-advantages-of-semantics-driven-abstractions) in this calculator.
 
-##### Failings
-
-In FRP via `reflex`, time is a discrete value.
-In `reflex`'s implementation, these discrete values are frames, like a frame in a stick-note animation.
-From the denotational semantics of FRP, we can determine what the correct value is when there's a "feedback loop" in the events.
-If A causes B to update and B causes A to update, the frame isn't finished until that computation ends.
-To "ensure" this computation ends, `MonadFix` is used.
-The frame doesn't end until the fixed point of A and B is reached.
-
-I started using `useMemo` to get around this as it returns the same value as long as the inputs are the same.
-So if the value of A doesn't change, then B won't update and cause A to change again too.
-But, when A updates B and then B is set to trigger A, A does not get re-evaluated until the next `render` call.
-Because of that, React "flickers" when there's a computation that changes "every" frame but eventually converges.
-It's this lack of denotational semantics or well-defined semantics that has caused me to change the flow of code, code that would work in a FRP context does not in React.
-
-This was most prevelant when the years being considered is changed and I was storing the years for the last rental place.
-When calculating the profit/equity, it would return `NaN` because the last rent place didn't last the rest of the years, as it was still using the previous years being considered.
-Say
+In the situtation described above in the "State" section, the years renting for each place was stored in an array, along with the rent place.
+The total years being considered was stored separately.
+For example, this could be the current data:
 
 -   total years = 20
 -   rent places
     1. 10 years
     2. 10 years
 
-then total years is changed to 21.
-The state would then be
+A related issue to storing the year for the last rent place was when the total years being considered increased.
+When that happens, the profit/equity for renting is calculated _before_ the last rent place is updated.
+The data would look like this:
 
 -   total years = 21
 -   rent places
     1. 10 years
     2. 10 years
 
-When looking for the rent for the 21st year, there is none; it would return `NaN` instead.
+When finding the rent for the last year, the rent lookup function would return `NaN`, as there was no place being rented for that year.
 
-However, the rent place would update itself to be 11 years long and the whole `render` process would go again, giving the correct result.
-This is done in a second `render`, giving a "flickering" effect.
+However, during the same update, the last rent place would be updated, so the data would be:
 
-To get around the flicker, the method to get the rent for a year was changed to return the final place's rent for anything after the second-to-last place.
+-   total years = 21
+-   rent places
+    1. 10 years
+    2. 11 years
+
+This would cause another `render` update for the page and thus a "flicker" would appear.
+
+This issue is caused by the lack of denotational semantics when there's an update in the same frame as another update.
+This is precisely the same issue as in the "advantage of semantics-drivin abstractions" article: an intermediate state is being shown.
+
+`reflex` "solves" this by using Haskell's `MonadFix`.
+`MonadFix` denotes a computation that has a [fixed point](https://en.wikipedia.org/wiki/Fixed_point_%28mathematics%29), or, a value that it converges to upon "infinite" "recursion".
+If React used FRP, then the DOM wouldn't render until the second update was finished, since no values would change afterwards.
+
+React "gets around" this issue by suggesting developers to ["lift state up"](https://reactjs.org/docs/lifting-state-up.html).
+
+**Lesson Learned: Use semantics-driven abstractions when possible.**
 
 ## CSS
 
-### Semantic class names
+### Semantic `class` Names
 
-In the HTML specification, it says
+In the [HTML specification for class](https://html.spec.whatwg.org/multipage/dom.html#global-attributes:classes-2) (found via [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/class)), it says
 
 > authors are encouraged to use values that describe the _nature of the content_, rather than values that describe the _desired presentation of the content_.
 
-This lines up with my overall philosophy and I applied it to this codebase.
-I thought I mention it here as developers often neglect this.
+This lines up with my overall philosophy, so I applied it to this codebase.
+This is not a lesson learned, but I thought I mention it here as developers often neglect this.
 
-### Parent, Child Styling
+### Modularization
 
-A question that popped into my mind when I was dealing with putting spacing between elements was
+A question popped into my mind when I was dealing with putting spacing between elements:
 
 > when should I use `margin` vs `padding`?
 
-I would change the left `margin` of the renting section and then having to also change the left `margin` of the breakdown section to make sure everything is lined up nice.
-But, I could do that with left `padding` on the parent component instead and make sure it's always in sync.
+Changing the left `margin` of the renting section entailed changing the left `margin` of the breakdown section as I wanted the two to line up nicely.
+But I could also achieve the same effect by adjusting the left `padding` of the page.
+If I did that, there would only be 1 place to change instead of 2.
 
-My epiphany was
+My epiphany was...
 
 > `margin` should be used for "parent" components while `padding` should be used for "child" components
 
-The `App` "parent" component can set the spacings between the renting and breakdown section "child" components using `margin` while the renting bad breakdown section "child" components can set the spacing inside their components using `padding`.
-`App` can also use `padding` but only on itself.
+and, soon after, in the more general sense, ...
 
-I'm not 100% sure on this as it's still kind of murky.
-But, that's the glimpse at something I saw through the murk.
+> a `ruleset` should only apply to inner elements, not outer elements
+
+I think a lot of developers, myself included, forget that CSS stands for _Cascading Style_ Sheets.
+Putting a declaration in a ruleset to affect the element when placed _inside_ another element goes directly against the principles of _Cascading Style_ Sheets.
+
+**Lesson Learned: Rulesets should be for _Cascading Style_ and not _Bubbling Style_.**
