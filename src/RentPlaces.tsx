@@ -9,6 +9,7 @@ import * as R from "ramda";
 import {
     add,
     calculate_last_year,
+    calculate_max_year_for,
     calculate_total_rent_for,
     can_add,
     RentPlaces as RentPlacesData,
@@ -82,6 +83,7 @@ const LastRentPlace: React.FC<LastRentPlaceProps> = (props) => {
 
     return (
         <RentPlace
+            max_years={length.value.current}
             true_rent={true_rent}
             monthly={props.monthly}
             years={length}
@@ -124,9 +126,16 @@ const RentPlaces: React.FC<Props> = (props) => {
                         enabled: true,
                     };
 
+                    const max_years = calculate_max_year_for(
+                        props.years,
+                        places,
+                        index
+                    );
+
                     return (
                         <li key={index}>
                             <RentPlace
+                                max_years={max_years}
                                 true_rent={true_rent}
                                 monthly={props.monthly}
                                 years={years}

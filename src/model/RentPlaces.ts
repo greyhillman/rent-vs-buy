@@ -5,6 +5,21 @@ export interface RentPlaces {
     last: RentValuation;
 }
 
+export function calculate_max_year_for(
+    total_years: number,
+    places: RentPlaces,
+    index: number
+): number {
+    const places_years = places.initial.map((p) => p.years);
+
+    const place_years = places_years[index];
+
+    const last_place_years = calculate_last_year(total_years, places);
+
+    // last rent place must be >= 1
+    return place_years + (last_place_years - 1);
+}
+
 export function calculate_total_rent_for(
     places: RentPlaces,
     year: number
