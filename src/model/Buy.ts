@@ -41,7 +41,7 @@ interface MonthlyExpenses {
 interface Mortgage {
     downpayment: number;
     value_at: (year: number) => number;
-    monthly_payment: number;
+    payments_for: (year: number) => number;
 }
 
 interface BuyAssets {
@@ -95,7 +95,7 @@ export function calculate_buy_breakdown(data: BuyData): BuyBreakdown {
         };
         const expenses: BuyExpenses = {
             monthly: data.expenses.monthly,
-            mortgage: data.expenses.mortgage.monthly_payment * 12,
+            mortgage: data.expenses.mortgage.payments_for(year),
             property: data.expenses.property(year),
         };
 

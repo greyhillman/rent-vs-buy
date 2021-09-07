@@ -17,6 +17,8 @@ export function calculate_monthly_rate(mortgage: Mortgage): number {
     return monthly_payment;
 }
 
+const EPSILON = 0.0001;
+
 export function get_mortgage_values(data: Mortgage): number[] {
     const values = [];
     let value = data.value;
@@ -25,14 +27,16 @@ export function get_mortgage_values(data: Mortgage): number[] {
 
     const monthly_rate = calculate_monthly_rate(data);
 
-    while (value > 0) {
+    while (value > EPSILON) {
         for (let month = 1; month <= 12; month++) {
             const interest = value * (data.interest_rate / 12);
 
             value = value + interest - monthly_rate;
         }
 
-        values.push(value);
+        if (value > 0) {
+            values.push(value);
+        }
     }
 
     return values;

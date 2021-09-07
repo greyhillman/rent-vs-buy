@@ -38,7 +38,7 @@ function useMortgageValuation(data: MortgageData): MortgageValuation {
 
     return useCallback(
         (year) => {
-            return values[year];
+            return values[year] ?? 0;
         },
         [values]
     );
