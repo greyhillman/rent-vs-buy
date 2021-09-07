@@ -18,6 +18,7 @@ interface Props {
         utilities: number;
         internet: number;
     };
+    max_years: number;
     years: Length;
 }
 
@@ -117,6 +118,7 @@ const RentPlace: React.FC<Props> = (props) => {
             >
                 <NumberInput
                     min={1}
+                    max={props.max_years}
                     step={1}
                     value={props.years.value.current}
                     onChange={props.years.value.update}
