@@ -56,7 +56,7 @@ The main one was how `useState` was sort of like a `Dynamic a` in `reflex`: a co
 In fact, the [Dynamic.ts](./src/model/Dynamic.ts) and [Event.ts](./src/model/Event.ts) were created because of that.
 After figuring out this relation, programming with `useState` became easier.
 
-However, React is not FRP and lacks any denotation semantics (ei: mathematical underpinnings).
+However, React is not FRP and lacks any denotational semantics (ei: mathematical underpinnings).
 It also was missing ideas from Haskell and functional programming in general that would have made things simpler.
 
 #### FRP
