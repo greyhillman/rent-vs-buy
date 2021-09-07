@@ -74,7 +74,14 @@ function useBuy(data: BuyHookData) {
             income: data.income,
             expenses: {
                 monthly: monthly,
-                mortgage: mortgage,
+                mortgage: {
+                    downpayment: mortgage.downpayment,
+                    value_at: mortgage.value_at,
+                    payments_for: (year) =>
+                        mortgage.value_at(year - 1) > 0
+                            ? mortgage.monthly_payment * 12
+                            : 0,
+                },
                 property: expenses_for.current,
             },
         };
