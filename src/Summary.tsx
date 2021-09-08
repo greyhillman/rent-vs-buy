@@ -8,7 +8,7 @@ interface Props {
 
 const Summary: React.FC<Props> = (props) => {
     return (
-        <header>
+        <header id="summary">
             <h2>Summary</h2>
             <section className="rent">
                 <h3>Renting</h3>
