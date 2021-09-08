@@ -1,0 +1,9 @@
+@mixin before($image) {
+    // From https://stackoverflow.com/a/8978010
+    background-image: $image;
+    background-size: 1em 1em;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    content: "";
+}

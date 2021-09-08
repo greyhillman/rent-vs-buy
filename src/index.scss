@@ -18,37 +18,20 @@ body {
     box-shadow: 0 0 20px 5px darken($color: white, $amount: 10%);
 
     > footer {
-        text-align: center;
-    }
-}
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        min-height: 4em;
 
-footer {
-    min-height: 4em;
-}
+        a.github {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
 
-ul {
-    padding-left: 3em;
-}
-
-p {
-    padding: 1em;
-}
-
-p + p {
-    padding-top: 0px;
-}
-
-@mixin h-padding($padding) {
-    padding-left: $padding;
-    padding-right: $padding;
-}
-
-@mixin list-spacing($selector, $spacing) {
-    #{$selector} {
-        padding-top: $spacing;
-
-        &:first-of-type {
-            padding-top: 0;
+            &::before {
+                @include icon.before(url("../GitHub-Mark-32px.png"));
+            }
         }
     }
 }
