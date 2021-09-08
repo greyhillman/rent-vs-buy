@@ -1,5 +1,13 @@
-$info-color: scale-color(#0000ff, $lightness: +90%);
-$info-border-color: darken($info-color, 20%);
+// Other files to build
+@use './style/fieldset.scss';
+@use './style/aside.scss';
+@use './style/button.scss';
+
+@use './style/spacing';
+@use './style/icon';
+@use './style/fonts';
+
+$default_font_size: 18px;
 
 * {
     box-sizing: border-box;
@@ -9,11 +17,11 @@ $info-border-color: darken($info-color, 20%);
 
 body {
     max-width: min(100%, 900px);
-    margin-left: auto;
-    margin-right: auto;
+    @include spacing.h-margins(auto);
 
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 18px;
+    font-family: fonts.$text;
+    font-size: $default_font_size;
+    line-height: $default_font_size;
 
     box-shadow: 0 0 20px 5px darken($color: white, $amount: 10%);
 
@@ -36,45 +44,21 @@ body {
     }
 }
 
-fieldset {
-    padding: 0.5em;
-    border-radius: 0.5em;
+#preamble {
+    @include spacing.children(spacing.$large_children);
+    @include spacing.h-padding(1em);
+    padding-top: 1em;
 
-    legend {
-        margin-left: 1em;
-        @include h-padding(0.5em);
+    ul {
+        padding-left: 3em;
     }
 }
 
-output {
-    background-color: darken($color: white, $amount: 10%);
-    padding: 0.125em;
-}
-
-label {
-    display: block;
-}
-
-@include list-spacing(label, 0.5em);
-
-input {
-    display: inline-block;
-}
-
-aside {
-    &.inline {
-        margin: 0 4em;
-    }
-
-    &.info {
-        background-color: $info-color;
-        border: $info-border-color 4px solid;
-        border-radius: 1em;
-        padding: 1em 2em;
-
-        &::before {
-            font-weight: bold;
-            content: "Note:";
-        }
-    }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-align: center;
 }

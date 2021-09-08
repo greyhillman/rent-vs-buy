@@ -1,0 +1,5 @@
+@use './style/spacing';
+
+section.rent {
+    @include spacing.children(spacing.$large_children);
+}

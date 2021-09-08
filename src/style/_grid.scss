@@ -1,0 +1,13 @@
+@mixin subgrid() {
+    display: grid;
+    grid-template-columns: subgrid;
+}
+
+@mixin grid($columns) {
+    display: grid;
+    grid-template-columns: $columns;
+}
+
+@mixin equal-grid($columns) {
+    @include grid(repeat($columns, 1fr));
+}

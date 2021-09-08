@@ -1,0 +1,35 @@
+@mixin v-padding($amount) {
+    padding-top: $amount;
+    padding-bottom: $amount;
+}
+
+@mixin h-padding($amount) {
+    padding-left: $amount;
+    padding-right: $amount;
+}
+
+@mixin v-margins($amount) {
+    margin-top: $amount;
+    margin-bottom: $amount;
+}
+
+@mixin h-margins($amount) {
+    margin-left: $amount;
+    margin-right: $amount;
+}
+
+@mixin children($amount) {
+    // For fieldsets, the legend is displayed "separately"
+    // than the child elements. The element after the legend
+    // doesn't need spacing as there's nothing above it.
+    //
+    // Instead of using a `:not` selector in the callers of this
+    // method, we'll put it here. The semantics of this mixin
+    // is to put spacing around elements in a list-like view.
+    > *:not(legend) + * {
+        margin-top: $amount;
+    }
+}
+
+$normal_children: 0.5em;
+$large_children: 1em;

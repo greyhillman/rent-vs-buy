@@ -1,4 +1,13 @@
+@use '../style/fonts';
+@use '../style/colors';
+@use '../style/spacing';
+
 output.currency {
-    background-color: darken($color: white, $amount: 5%);
-    font-family: "Courier New", Courier, monospace;
+    @include spacing.v-padding(2px);
+    @include spacing.h-padding(0.5em);
+    background-color: colors.$output_color;
+    font-family: fonts.$currency;
+    text-align: right;
+
+    border-radius: 0.5em;
 }

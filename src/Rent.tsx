@@ -4,6 +4,8 @@ import { Event } from "./model/Event";
 import { RentValuation } from "./model/RentPlace";
 import RentPlacesData from "./RentPlaces";
 
+import "./Rent.scss";
+
 interface Props {
     years: number;
     monthly: {

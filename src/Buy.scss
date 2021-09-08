@@ -1,0 +1,11 @@
+@use './style/spacing';
+
+section.buy {
+    @include spacing.children(spacing.$large_children);
+
+    fieldset {
+        > p.help {
+            font-size: 0.8em;
+        }
+    }
+}

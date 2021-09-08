@@ -1,6 +1,8 @@
 import React from "react";
 import CurrencyOutput from "./primitive/CurrencyOutput";
 
+import "./Summary.scss";
+
 interface Props {
     rent: number;
     buy: number;
