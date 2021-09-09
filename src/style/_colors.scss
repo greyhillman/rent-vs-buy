@@ -1,3 +1,8 @@
+$page_shadow: darken(
+    $color: white,
+    $amount: 10%,
+);
+
 $button: rgb(240, 240, 240);
 $button_hover: darken(
     $color: $button,

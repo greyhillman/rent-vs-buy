@@ -6,6 +6,7 @@
 @use './style/spacing';
 @use './style/icon';
 @use './style/fonts';
+@use './style/colors';
 @use './style/row';
 
 $default_font_size: 18px;
@@ -24,7 +25,7 @@ body {
     font-size: $default_font_size;
     line-height: $default_font_size;
 
-    box-shadow: 0 0 20px 5px darken($color: white, $amount: 10%);
+    box-shadow: 0 0 20px 5px colors.$page_shadow;
 
     > footer {
         @include row.v-centered();
