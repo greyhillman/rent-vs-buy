@@ -1,0 +1,15 @@
+@use './spacing';
+
+fieldset {
+    @include spacing.children(spacing.$normal_children);
+
+    padding: 0.5em;
+    border-radius: 0.5em;
+
+    box-shadow: 3px 3px 5px 0px lightgray;
+
+    > legend {
+        @include spacing.h-margins(0.5em);
+        @include spacing.h-padding(0.5em);
+    }
+}

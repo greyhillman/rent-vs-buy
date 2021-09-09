@@ -1,86 +1,31 @@
-@mixin subgrid() {
-    display: grid;
-    grid-template-columns: subgrid;
-}
-
-@function shade_of_grey($level) {
-    @return rgb($level, $level, $level);
-}
+@use './style/grid';
+@use './style/spacing';
 
 main {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    @include grid.equal-grid(2);
     column-gap: 2em;
     align-items: baseline; // https://melanie-richards.com/blog/css-grid-sticky/
 
-    margin: 0em 1em;
+    @include spacing.h-margins(1em);
+    @include spacing.children(spacing.$large_children);
 
     > header {
         grid-column: span 2;
         position: sticky;
         top: 0;
+        // Sticky background is "transparent" by default
         background-color: white;
-        padding: 0.5em 1em;
-
-        border-bottom: darken($color: black, $amount: 50%) 0.2em solid;
-
-        @include subgrid();
-
-        h2 {
-            grid-column: span 2;
-        }
-
-        > section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-
-            h3 {
-                grid-column: span 2;
-            }
-        }
-
-        section.buy {
-            text-align: right;
-
-            output {
-                text-align: right;
-            }
-        }
-
-        output {
-            text-align: right;
-        }
     }
 
-    section {
+    > section {
         &.both,
         &#breakdown {
             grid-column: span 2;
         }
 
-        &#breakdown {
-            margin-top: 1em;
-        }
-
         &.both {
             width: 700px;
-            margin: 0 auto;
-        }
-
-        &.buy {
-            p.help {
-                padding-top: 0.5em;
-                font-size: 0.8em;
-            }
+            @include spacing.h-margins(auto);
         }
     }
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    text-align: center;
 }

@@ -17,6 +17,8 @@ import Mortgage from "./Mortgage";
 import Property from "./Property";
 import PropertyExpenses from "./PropertyExpenses";
 
+import "./Buy.scss";
+
 interface Props {
     years: number;
     principal: number;

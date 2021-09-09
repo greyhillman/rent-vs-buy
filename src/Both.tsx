@@ -5,6 +5,8 @@ import NumberInput from "./primitive/NumberInput";
 import { Dynamic } from "./model/Dynamic";
 import Expenses from "./Expenses";
 
+import "./Both.scss";
+
 interface Props {
     principal: Dynamic<number>;
     years: Dynamic<number>;

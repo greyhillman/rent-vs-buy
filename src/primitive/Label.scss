@@ -1,10 +1,15 @@
+@use '../style/grid';
+@use '../style/spacing';
+
 label {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: block;
+
+    @include grid.equal-grid(2);
     grid-template-areas:
         "name input"
         "help help";
-    row-gap: 0.25em;
+    row-gap: 0.05em;
+    align-items: center;
 
     strong {
         grid-area: name;
@@ -17,9 +22,9 @@ label {
     }
 
     p.help {
+        @include spacing.h-margins(0.5em);
         grid-area: help;
         display: block;
-        padding: 0 0.5em;
 
         font-size: 0.8em;
     }

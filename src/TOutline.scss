@@ -1,26 +1,19 @@
-@mixin subgrid() {
-    display: grid;
-    grid-template-columns: subgrid;
-}
-
-@mixin grid($columns) {
-    display: grid;
-    grid-template-columns: repeat($columns, 1fr);
-}
+@use './style/grid';
 
 section.taccount {
-    @include grid(4);
+    @include grid.equal-grid(4);
+    column-gap: 0.25em;
+
     border: black 1px solid;
 
     padding: 0.2em;
-    column-gap: 0.25em;
 
     strong {
         font-size: medium;
     }
 
     > footer {
-        @include subgrid();
+        @include grid.subgrid();
         grid-column: span 4;
 
         border-top: black 1px solid;
@@ -34,7 +27,7 @@ section.taccount {
     }
 
     header {
-        @include subgrid();
+        @include grid.subgrid();
         grid-column: span 4;
         text-align: center;
 
@@ -45,7 +38,7 @@ section.taccount {
 
     .left,
     .right {
-        @include subgrid();
+        @include grid.subgrid();
         grid-column: span 2;
     }
 
@@ -57,7 +50,7 @@ section.taccount {
     }
 
     .account {
-        @include subgrid();
+        @include grid.subgrid();
         // grid-column: span 2;
 
         padding-left: 10px;

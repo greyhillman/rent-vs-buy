@@ -1,15 +1,23 @@
+@use '../style/fonts';
+@use '../style/colors';
+
 input {
     &[type="number"] {
         text-align: right;
         font-size: 1em;
         width: 10em;
-        font-family: "Courier New", Courier, monospace;
+        font-family: fonts.$input;
 
-        background-color: darken($color: white, $amount: 5%);
+        background-color: colors.$input;
         border-radius: 0.5em;
+        border-style: outset;
 
         &:blank {
-            background-color: adjust-color($color: red, $lightness: 90%);
+            background-color: colors.$invalid_input;
         }
+    }
+
+    &:disabled {
+        border-style: solid;
     }
 }

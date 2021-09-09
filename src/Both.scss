@@ -1,7 +1,5 @@
 @use './style/spacing';
 
-.place {
-    padding: 0.5em;
-
+section.both {
     @include spacing.children(spacing.$normal_children);
 }

@@ -1,0 +1,23 @@
+@use './spacing';
+@use './colors';
+
+aside {
+    &.inline {
+        @include spacing.h-margins(4em);
+    }
+
+    &.info {
+        @include spacing.v-padding(1em);
+        @include spacing.h-padding(2em);
+
+        background-color: colors.$info;
+
+        border: colors.$info_border 4px solid;
+        border-radius: 1em;
+
+        &::before {
+            font-weight: bold;
+            content: "Note:";
+        }
+    }
+}

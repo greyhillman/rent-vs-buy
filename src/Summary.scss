@@ -1,0 +1,29 @@
+@use './style/grid';
+@use './style/spacing';
+
+#summary {
+    @include spacing.v-padding(0.5em);
+    @include spacing.h-padding(1em);
+
+    @include grid.subgrid();
+
+    border-bottom: black 0.2em solid;
+
+    h2 {
+        grid-column: span 2;
+    }
+
+    > section {
+        @include grid.equal-grid(2);
+        @include spacing.children(0);
+        row-gap: spacing.$normal_children;
+
+        h3 {
+            grid-column: span 2;
+        }
+    }
+
+    section.buy {
+        text-align: right;
+    }
+}

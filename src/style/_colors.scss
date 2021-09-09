@@ -1,0 +1,32 @@
+$page_shadow: darken(
+    $color: white,
+    $amount: 10%,
+);
+
+$button: rgb(240, 240, 240);
+$button_hover: darken(
+    $color: $button,
+    $amount: 10%,
+);
+$button_depressed: darken(
+    $color: $button,
+    $amount: 15%,
+);
+$button_border: darken(
+    $color: $button,
+    $amount: 20%,
+);
+
+$info: scale-color(blue, $lightness: +90%);
+$info_border: darken($info, 20%);
+
+$input: darken(
+    $color: white,
+    $amount: 5%,
+);
+$invalid_input: adjust-color(
+    $color: red,
+    $lightness: 90%,
+);
+
+$output_color: $input;

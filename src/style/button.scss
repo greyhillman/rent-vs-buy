@@ -1,0 +1,33 @@
+@use './colors';
+
+button {
+    display: block;
+    appearance: none;
+
+    border-style: outset;
+    border-width: 2px;
+    border-color: colors.$button_border;
+    border-radius: 1em;
+
+    font-size: 0.9em;
+    padding: 0.5em;
+
+    background-color: colors.$button;
+
+    &:enabled {
+        &:hover {
+            cursor: pointer;
+            background-color: colors.$button_hover;
+        }
+
+        &:active {
+            border-style: inset;
+            background-color: colors.$button_depressed;
+        }
+    }
+
+    &:disabled {
+        border-style: solid;
+        cursor: not-allowed;
+    }
+}
