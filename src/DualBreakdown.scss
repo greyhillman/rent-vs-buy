@@ -1,10 +1,9 @@
 @use './style/grid';
 @use './style/spacing';
+@use './style/column';
 
 #breakdown {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    @include column.h-centered();
 
     border-top: black 2px solid;
 

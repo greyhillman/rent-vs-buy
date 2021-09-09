@@ -6,6 +6,7 @@
 @use './style/spacing';
 @use './style/icon';
 @use './style/fonts';
+@use './style/row';
 
 $default_font_size: 18px;
 
@@ -26,16 +27,12 @@ body {
     box-shadow: 0 0 20px 5px darken($color: white, $amount: 10%);
 
     > footer {
-        display: flex;
-        flex-direction: row;
+        @include row.v-centered();
         justify-content: space-around;
-        align-items: center;
         min-height: 4em;
 
         a.github {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
+            @include row.v-centered();
 
             &::before {
                 @include icon.before(url("../GitHub-Mark-32px.png"));

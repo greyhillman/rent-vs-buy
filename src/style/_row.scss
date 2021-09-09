@@ -1,0 +1,9 @@
+@mixin normal() {
+    display: flex;
+    flex-direction: row;
+}
+
+@mixin v-centered() {
+    @include normal();
+    align-items: center;
+}
